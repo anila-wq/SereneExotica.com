@@ -24,11 +24,10 @@ interface ResponsiveLayoutProps {
 export default function ResponsiveLayout({
   onButtonClick,
 }: ResponsiveLayoutProps) {
-  const [expandedFAQ, setExpandedFAQ] = useState<number | null>(
-    null,
-  );
+  const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [showMapModal, setShowMapModal] = useState(false);
   const [uniqueExpanded, setUniqueExpanded] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   const toggleFAQ = (index: number) => {
     setExpandedFAQ(expandedFAQ === index ? null : index);
@@ -113,18 +112,39 @@ export default function ResponsiveLayout({
         id="hero-section"
         className="relative pt-0 pb-12 md:pb-16"
       >
-        {/* Full-width Video — flush against header */}
+        {/* Full-width Video — click-to-load facade for fast initial paint */}
         <div className="mb-6 md:mb-8">
           <div className="relative w-full overflow-hidden shadow-2xl">
-            <div className="relative pt-[56.25%]">
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/iVPrZa_ouHU?rel=0&modestbranding=1"
-                title="Serene Exotica Video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+            <div className="relative pt-[56.25%] bg-black">
+              {videoLoaded ? (
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src="https://www.youtube.com/embed/iVPrZa_ouHU?rel=0&modestbranding=1&autoplay=1"
+                  title="Serene Exotica Video"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <button
+                  onClick={() => setVideoLoaded(true)}
+                  className="absolute inset-0 w-full h-full group"
+                  aria-label="Play video"
+                >
+                  <img
+                    src={`https://i.ytimg.com/vi/iVPrZa_ouHU/maxresdefault.jpg`}
+                    alt="Serene Exotica Video"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-red-600 rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+                      <svg className="w-7 h-7 md:w-9 md:h-9 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -204,6 +224,7 @@ export default function ResponsiveLayout({
               <img
                 alt="Malur Investment"
                 className="w-full h-60 md:h-72 lg:h-full lg:min-h-[420px] object-cover"
+                loading="lazy"
                 src={imgRectangle1}
               />
             </div>
@@ -272,6 +293,7 @@ export default function ResponsiveLayout({
               <img
                 alt="Unique Feature"
                 className="w-full h-60 md:h-72 lg:h-[480px] object-cover"
+                loading="lazy"
                 src={imgRectangle13}
               />
             </div>
@@ -399,6 +421,7 @@ export default function ResponsiveLayout({
             <img
               alt="Master Plan"
               className="w-full h-64 md:h-80 lg:h-96 object-cover"
+              loading="lazy"
               src={imgRectangle14}
             />
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -480,6 +503,7 @@ export default function ResponsiveLayout({
               <img
                 alt="Brochure"
                 className="h-48 md:h-56 w-auto mx-auto rounded-xl shadow-lg"
+                loading="lazy"
                 src={imgRectangle15}
               />
             </div>
@@ -542,6 +566,7 @@ export default function ResponsiveLayout({
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Serene Exotica Location"
+              importance="low"
               className="w-full h-64 md:h-80 lg:h-96"
             />
           </div>
