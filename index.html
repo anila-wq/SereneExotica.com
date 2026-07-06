@@ -1,23 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Why Malur Is One of the Fastest Growing Investment Zones Near Bengaluru | Plots &amp; Villa Plots in Malur</title>
-      <meta name="description" content="Discover why Malur is emerging as Bengaluru’s fastest-growing investment zone. Explore infrastructure growth, connectivity, job hubs, and the rising demand for villa plots in Malur near Serene Exotica." />
-      <meta name="robots" content="noindex, nofollow" />
-      <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
-      
-      <script type="module" crossorigin src="/assets/index-CaWWD7CM.js"></script>
-      <link rel="stylesheet" crossorigin href="/assets/index-BOy08QCV.css">
-    </head>
+<head>
+  <!-- Google Analytics GA4 - Serene Exotica -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-442BL2VLBB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-    <body>
-      
-      <div id="root"></div>
-      
-    </body>
-  </html>
-  
+    gtag('config', 'G-442BL2VLBB');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why Malur Is One of the Fastest Growing Investment Zones Near Bengaluru | Plots &amp; Villa Plots in Malur
+  </title>
+  <meta name="description"
+    content="Discover why Malur is emerging as Bengaluru’s fastest-growing investment zone. Explore infrastructure growth, connectivity, job hubs, and the rising demand for villa plots in Malur near Serene Exotica." />
+  <meta name="robots" content="index, follow" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    #root {
+      height: 100%;
+    }
+  </style>
+
+  <script type="module" crossorigin src="/assets/index-CaWWD7CM.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BOy08QCV.css">
+</head>
+
+<body>
+
+  <div id="root"></div>
+  <!-- Custom GA4 Tracking - Sections, Buttons, Time -->
+  <script>
+    function sendGAEvent(eventName, params) {
+      if (typeof gtag === "function") {
+        gtag("event", eventName, params);
+      }
+    }
+
+    window.addEventListener("load", function () {
+      setTimeout(function () {
+
+        const possibleSections = document.querySelectorAll(
+          "section, main > div, [class*='section'], [class*='hero'], [class*='about'], [class*='contact'], [class*='project'], [class*='amenity'], [class*='gallery'], [class*='location'], [class*='highlight'], [class*='master'], [class*='plot']"
+        );
+
+        possibleSections.forEach(function (section, index) {
+          if (!section.dataset.section) {
+            section.dataset.section = "section_" + (index + 1);
+          }
+        });
+
+        document.addEventListener("click", function (event) {
+          const element = event.target.closest("a, button");
+
+          if (!element) return;
+
+          const text = element.innerText ? element.innerText.trim() : "Unknown";
+          const href = element.href || "";
+          const parentSection = element.closest("[data-section]");
+          const sectionName = parentSection ? parentSection.dataset.section : "unknown_section";
+
+          let eventName = "button_click";
+
+          if (href.includes("wa.me") || href.includes("whatsapp")) {
+            eventName = "whatsapp_click";
+          } else if (href.startsWith("tel:")) {
+            eventName = "call_click";
+          } else if (href.startsWith("mailto:")) {
+            eventName = "email_click";
+          } else if (href.includes(".pdf")) {
+            eventName = "brochure_download";
+          } else if (text.toLowerCase().includes("site visit")) {
+            eventName = "book_site_visit_click";
+          } else if (text.toLowerCase().includes("enquire") || text.toLowerCase().includes("inquire")) {
+            eventName = "enquire_now_click";
+          } else if (text.toLowerCase().includes("location") || text.toLowerCase().includes("map")) {
+            eventName = "map_click";
+          }
+
+          sendGAEvent(eventName, {
+            button_name: text || "Unknown",
+            section_name: sectionName,
+            link_url: href,
+            page_path: window.location.pathname,
+            page_title: document.title
+          });
+        });
+
+        const viewedSections = new Set();
+
+        const sectionViewObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            const sectionName = entry.target.dataset.section;
+
+            if (entry.isIntersecting && sectionName && !viewedSections.has(sectionName)) {
+              viewedSections.add(sectionName);
+
+              sendGAEvent("section_view", {
+                section_name: sectionName,
+                page_path: window.location.pathname,
+                page_title: document.title
+              });
+            }
+          });
+        }, {
+          threshold: 0.5
+        });
+
+        document.querySelectorAll("[data-section]").forEach(function (section) {
+          sectionViewObserver.observe(section);
+        });
+
+        let activeSection = null;
+        let sectionStartTime = Date.now();
+
+        function sendSectionTime(sectionName) {
+          if (!sectionName) return;
+
+          const timeSpent = Math.round((Date.now() - sectionStartTime) / 1000);
+
+          if (timeSpent >= 3) {
+            sendGAEvent("section_time", {
+              section_name: sectionName,
+              time_spent_seconds: timeSpent,
+              page_path: window.location.pathname,
+              page_title: document.title
+            });
+          }
+        }
+
+        const sectionTimeObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              const newSection = entry.target.dataset.section;
+
+              if (newSection && activeSection !== newSection) {
+                sendSectionTime(activeSection);
+                activeSection = newSection;
+                sectionStartTime = Date.now();
+              }
+            }
+          });
+        }, {
+          threshold: 0.6
+        });
+
+        document.querySelectorAll("[data-section]").forEach(function (section) {
+          sectionTimeObserver.observe(section);
+        });
+
+        window.addEventListener("beforeunload", function () {
+          sendSectionTime(activeSection);
+        });
+
+      }, 2000);
+    });
+  </script>
+
+</body>
+
+</html>
