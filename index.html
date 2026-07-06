@@ -50,12 +50,26 @@
       setTimeout(function () {
 
         const possibleSections = document.querySelectorAll(
-          "section, main > div, [class*='section'], [class*='hero'], [class*='about'], [class*='contact'], [class*='project'], [class*='amenity'], [class*='gallery'], [class*='location'], [class*='highlight'], [class*='master'], [class*='plot']"
+          "section, footer, main > div, [class*='section'], [class*='footer'], [class*='hero'], [class*='about'], [class*='contact'], [class*='project'], [class*='amenity'], [class*='gallery'], [class*='location'], [class*='highlight'], [class*='master'], [class*='plot']"
         );
+
+        const sectionNames = [
+          "home_hero",
+          "project_highlights",
+          "about_project",
+          "master_plan",
+          "plot_details",
+          "amenities",
+          "location_advantage",
+          "gallery",
+          "why_invest",
+          "contact_form",
+          "footer"
+        ];
 
         possibleSections.forEach(function (section, index) {
           if (!section.dataset.section) {
-            section.dataset.section = "section_" + (index + 1);
+            section.dataset.section = sectionNames[index] || "section_" + (index + 1);
           }
         });
 
