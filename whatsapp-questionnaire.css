@@ -304,3 +304,100 @@
     padding-left: 52px;
   }
 }
+
+/* Message shown when visitor selects No */
+.wa-thank-you {
+  display: none;
+  background: #ecfbf2;
+  border: 1px solid #25D366;
+  border-radius: 14px;
+  padding: 20px 16px;
+  margin-bottom: 16px;
+  text-align: center;
+  color: #075e54;
+  animation: waThankYou 0.25s ease;
+}
+
+.wa-thank-you-icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.wa-thank-you strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.wa-thank-you div:last-child {
+  font-size: 13px;
+  color: #52645f;
+  line-height: 1.4;
+}
+
+@keyframes waThankYou {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Serene Exotica questionnaire logo */
+.wa-header-icon {
+  width: 90px;
+  height: 54px;
+  min-width: 90px;
+  padding: 5px;
+  border-radius: 10px;
+  background: #000000;
+  border: 1px solid rgba(255,255,255,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.wa-header-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Circular Serene Exotica logo in questionnaire header */
+.wa-header-icon {
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
+  padding: 4px;
+  border-radius: 50%;
+  background: #000000;
+  border: 2px solid rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.wa-header-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+}
