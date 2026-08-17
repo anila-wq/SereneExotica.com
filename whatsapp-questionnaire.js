@@ -16,7 +16,9 @@
 
       <div class="wa-header">
         <div class="wa-header-info">
-          <div class="wa-header-icon">💬</div>
+          <div class="wa-header-icon">
+            <img src="./serene-exotica-logo.png" alt="Serene Exotica">
+          </div>
           <div>
             <div class="wa-header-title">Serene Exotica</div>
             <div class="wa-header-subtitle">Let us understand your requirement</div>
@@ -122,6 +124,66 @@
 
   document.body.appendChild(chatbot);
 
+  /*
+   * Hide the website's old floating WhatsApp widget.
+   * Only fixed/floating WhatsApp elements are hidden.
+   * Normal phone/contact information in the page is left untouched.
+   */
+  function hideOldWhatsAppWidget() {
+    const selectors = [
+      'a[href*="wa.me"]',
+      'a[href*="api.whatsapp.com"]',
+      'a[href*="whatsapp.com/send"]',
+      '[aria-label*="whatsapp" i]',
+      '[title*="whatsapp" i]',
+      '[id*="whatsapp" i]',
+      '[class*="whatsapp" i]'
+    ];
+
+    document.querySelectorAll(selectors.join(",")).forEach(function (element) {
+      if (chatbot.contains(element)) {
+        return;
+      }
+
+      let current = element;
+      let fixedWrapper = null;
+
+      while (current && current !== document.body) {
+        const style = window.getComputedStyle(current);
+
+        if (style.position === "fixed") {
+          fixedWrapper = current;
+          break;
+        }
+
+        current = current.parentElement;
+      }
+
+      if (fixedWrapper && !chatbot.contains(fixedWrapper)) {
+        fixedWrapper.style.setProperty("display", "none", "important");
+      }
+    });
+  }
+
+  hideOldWhatsAppWidget();
+
+  window.addEventListener("load", function () {
+    hideOldWhatsAppWidget();
+
+    setTimeout(hideOldWhatsAppWidget, 500);
+    setTimeout(hideOldWhatsAppWidget, 1500);
+  });
+
+  const oldWhatsAppObserver = new MutationObserver(function () {
+    hideOldWhatsAppWidget();
+  });
+
+  oldWhatsAppObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+
   const chatButton = document.getElementById("wa-chat-button");
   const chatBox = document.getElementById("wa-chat-box");
   const closeButton = document.getElementById("wa-close");
@@ -136,9 +198,82 @@
     chatBox.classList.remove("open");
   });
 
+  function handleInterestSelection() {
+    const interest =
+      form.querySelector('input[name="interest"]:checked');
+
+    const questions = form.querySelectorAll(".wa-question");
+    const footerNote = form.querySelector(".wa-footer-note");
+
+    let thankYou = document.getElementById("wa-no-thank-you");
+
+    if (!thankYou) {
+      thankYou = document.createElement("div");
+      thankYou.id = "wa-no-thank-you";
+      thankYou.className = "wa-thank-you";
+      thankYou.innerHTML = `
+        <div class="wa-thank-you-icon">✓</div>
+        <strong>Thank you for visiting our website.</strong>
+        <div>We appreciate your interest in Serene Exotica.</div>
+      `;
+
+      questions[0].insertAdjacentElement("afterend", thankYou);
+    }
+
+    if (interest && interest.value === "No") {
+
+      if (questions[1]) {
+        questions[1].style.display = "none";
+      }
+
+      if (questions[2]) {
+        questions[2].style.display = "none";
+      }
+
+      form.querySelectorAll(
+        'input[name="timeline"], input[name="budget"]'
+      ).forEach(function (input) {
+        input.checked = false;
+      });
+
+      submitButton.style.display = "none";
+
+      if (footerNote) {
+        footerNote.style.display = "none";
+      }
+
+      thankYou.style.display = "block";
+
+      return true;
+    }
+
+    if (questions[1]) {
+      questions[1].style.removeProperty("display");
+    }
+
+    if (questions[2]) {
+      questions[2].style.removeProperty("display");
+    }
+
+    submitButton.style.removeProperty("display");
+
+    if (footerNote) {
+      footerNote.style.removeProperty("display");
+    }
+
+    thankYou.style.display = "none";
+
+    return false;
+  }
+
   form.addEventListener("change", function () {
     const interest =
       form.querySelector('input[name="interest"]:checked');
+
+    if (handleInterestSelection()) {
+      submitButton.disabled = true;
+      return;
+    }
 
     const timeline =
       form.querySelector('input[name="timeline"]:checked');
